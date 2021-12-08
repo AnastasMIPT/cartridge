@@ -649,8 +649,9 @@ local function cfg(clusterwide_config)
     local first_appointments
 
     -- disable raft if it was enabled
-    raft_failover.disable()
-
+    if failover_cfg.mode ~= 'raft' then
+        raft_failover.disable()
+    end
     if failover_cfg.mode == 'disabled' then
         log.info('Failover disabled')
         vars.fencing_enabled = false
