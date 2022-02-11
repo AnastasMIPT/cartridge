@@ -3,6 +3,7 @@
 local fio = require('fio')
 local t = require('luatest')
 local g = t.group()
+local helpers = require('test.helper')
 
 local pool = require('cartridge.pool')
 local utils = require('cartridge.utils')
@@ -52,6 +53,7 @@ function g.test_identity()
         opts = {
             user = 'admin',
             wait_connected = false,
+            fetch_schema = false,
         },
     })
 
@@ -132,4 +134,10 @@ function g.test_async_call_remote()
 
     local future = conn:call('pcall', {'smth'}, {is_async = true})
     t.assert_equals({future:wait_result()}, {{false, 'attempt to call a string value'}})
+end
+
+function g.test_schema_fetch()
+    t.skip_if(not helpers.tarantool_version_ge('2.10.0'))
+    local conn = pool.connect('localhost:13301')
+    t.assert_equals(conn.space, nil)
 end
