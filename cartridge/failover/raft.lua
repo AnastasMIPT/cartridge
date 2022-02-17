@@ -39,10 +39,10 @@ local function get_appointments(topology_cfg)
             local member = membership.get_member(server.uri)
 
             if member ~= nil
-            and member.payload.raft_leader ~= nil
+            and member.payload.leader_uuid ~= nil
             and member.payload.raft_term >= last_term
             then
-                last_leader = member.payload.raft_leader
+                last_leader = member.payload.leader_uuid
                 last_term = member.payload.raft_term
             end
         end
@@ -62,7 +62,7 @@ local function on_election_trigger()
     if vars.leader_uuid ~= leader.uuid then
         vars.cache.is_leader = vars.leader_uuid == vars.instance_uuid
         vars.leader_uuid = leader.uuid
-        membership.set_payload('raft_leader', vars.leader_uuid)
+        membership.set_payload('leader_uuid', vars.leader_uuid)
     end
     membership.set_payload('raft_term', election.term)
 end
