@@ -2,6 +2,9 @@ local log = require('log')
 local vshard = require('vshard')
 local checks = require('checks')
 
+-- Drop after https://github.com/tarantool/vshard/issues/310 will be released
+_G.vshard = vshard
+
 local vars = require('cartridge.vars').new('cartridge.roles.vshard-storage')
 local pool = require('cartridge.pool')
 local utils = require('cartridge.utils')
